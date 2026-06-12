@@ -35,11 +35,22 @@ func (t *TorrentFile) RequestPeers(peerID [20]byte, port uint16) ([]Peer, error)
 
 	fmt.Printf("Connecting to tracker: %s\n", t.Announce)
 
-	resp, err := http.Get(trackerURL)
+	req, err := http.NewRequest("GET", trackerURL, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", "qBittorrent/4.3.9")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("tracker returned HTTP %d: %s", resp.StatusCode, http.StatusText(resp.StatusCode))
+	}
 
 	trackerResp := bencodeTrackerResp{}
 	err = bencode.Unmarshal(resp.Body, &trackerResp)

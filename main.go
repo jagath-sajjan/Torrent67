@@ -1,11 +1,15 @@
 package main
 
 import (
+	"bytes"
 	"crypto/rand"
 	"fmt"
 	"log"
+	"net"
 	"os"
+	"time"
 
+	"Torrent67/handshake"
 	"Torrent67/torrentfile"
 )
 
@@ -41,4 +45,37 @@ func main() {
 	for _, peer := range peers {
 		fmt.Printf(" - %s:%d\n", peer.IP, peer.Port)
 	}
+
+	peer := peers[0]
+	address := fmt.Sprintf("%s:%d", peer.IP, peer.Port)
+	fmt.Printf("\nDialing TCP connection to %s...\n", address)
+
+	conn, err := net.DialTimeout("tcp", address, 3*time.Second)
+	if err != nil {
+		log.Fatalf("Failed to connect to peer: %v", err)
+	}
+	defer conn.Close()
+
+	fmt.Println("Connected! Sending BitTorrent Handshake...")
+
+	req := handshake.Handshake{
+		Pstr:     "BitTorrent protocol",
+		InfoHash: tf.InfoHash,
+		PeerID:   peerID,
+	}
+
+	_, err = conn.Write(req.Serialize())
+	if err != nil {
+		log.Fatalf("Failed to send handshake: %v", err)
+	}
+
+	res, err := handshake.Read(conn)
+	if err != nil {
+		log.Fatalf("Failed to read handshake response: %v", err)
+	}
+
+	if !bytes.Equal(res.InfoHash[:], tf.InfoHash[:]) {
+		log.Fatalf("Expected infohash %x but got %x", tf.InfoHash, res.InfoHash)
+	}
+	fmt.Println("Handshake successpul! Peer ID: %x\n", res.PeerID)
 }
