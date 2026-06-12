@@ -1,24 +1,13 @@
 package main
 
 import (
+	"crypto/rand"
 	"fmt"
 	"log"
 	"os"
 
-	"github.com/jackpal/bencode-go"
+	"Torrent67/torrentfile"
 )
-
-type bencodeInfo struct {
-	Pieces       string `bencode:"pieces"`       // concatenated 20 byte SHA-1 hashes
-	PiecesLength int    `bencode:"piece length"` // no of bytes  per piece
-	Length       int    `bencode:"length"`       // total len of the file
-	Name         string `bencode:"name"`         // name of the file
-}
-
-type bencodeTorrent struct {
-	Announce string      `bencode:"announce"` // tracker url
-	Info     bencodeInfo `bencode:"info"`
-}
 
 func main() {
 	if len(os.Args) < 2 {
@@ -26,21 +15,25 @@ func main() {
 	}
 
 	torrentPath := os.Args[1]
-	file, err := os.Open(torrentPath)
-	if err != nil {
-		log.Fatal("Error opening file: %v", err)
-	}
-	defer file.Close()
 
-	var bto bencodeTorrent
-
-	err = bencode.Unmarshal(file, &bto)
+	tf, err := torrentfile.Open(torrentPath)
 	if err != nil {
-		log.Fatal("Error prasing bencode: %v", err)
+		log.Fatalf("Error opening file: %v", err)
 	}
 
-	fmt.Println("--- Torrent Parsed Successfully ---")
-	fmt.Println("Tracker Url: %s\n", bto.Announce)
-	fmt.Println("File Name: %s\n", bto.Info.Name)
-	fmt.Println("File Lenght: %d bytes\n", bto.Info.Length)
+	fmt.Println("--- Torrent Parsed Successpully ---")
+	fmt.Printf("Tracker URL: %s\n", tf.Announce)
+	fmt.Printf("File name:    %s\n", tf.Name)
+	fmt.Printf("Info Hash:  %x\n", tf.InfoHash)
+
+	var peerID [20]byte
+	_, err = rand.Read(peerID[:])
+	if err != nil {
+		log.Fatalf("Error generating peer ID: %v", err)
+	}
+
+	err = tf.RequestPeers(peerID, 6881)
+	if err != nil {
+		log.Fatalf("Error requesting peers: %v", err)
+	}
 }
