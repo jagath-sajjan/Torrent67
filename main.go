@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"Torrent67/handshake"
+	"Torrent67/message"
 	"Torrent67/torrentfile"
 )
 
@@ -25,13 +26,14 @@ func main() {
 		log.Fatalf("Error opening file: %v", err)
 	}
 
-	fmt.Println("--- Torrent Parsed Successpully ---")
+	fmt.Println("--- Torrent Parsed Successfully ---")
 	fmt.Printf("Tracker URL: %s\n", tf.Announce)
-	fmt.Printf("File name:    %s\n", tf.Name)
-	fmt.Printf("Info Hash:  %x\n", tf.InfoHash)
+	fmt.Printf("File name:   %s\n", tf.Name)
+	fmt.Printf("Info Hash:   %x\n", tf.InfoHash)
 
 	var peerID [20]byte
-	_, err = rand.Read(peerID[:])
+	copy(peerID[:], []byte("-qB4390-"))
+	_, err = rand.Read(peerID[8:])
 	if err != nil {
 		log.Fatalf("Error generating peer ID: %v", err)
 	}
@@ -42,8 +44,9 @@ func main() {
 	}
 
 	fmt.Printf("Found %d peers!\n", len(peers))
-	for _, peer := range peers {
-		fmt.Printf(" - %s:%d\n", peer.IP, peer.Port)
+
+	if len(peers) == 0 {
+		log.Fatalf("Tracker returned 0 peers. The tracker might be blocking us, or the torrent is dead.")
 	}
 
 	peer := peers[0]
@@ -77,5 +80,48 @@ func main() {
 	if !bytes.Equal(res.InfoHash[:], tf.InfoHash[:]) {
 		log.Fatalf("Expected infohash %x but got %x", tf.InfoHash, res.InfoHash)
 	}
-	fmt.Println("Handshake successpul! Peer ID: %x\n", res.PeerID)
+
+	fmt.Printf("Handshake successful! Peer ID: %x\n", res.PeerID)
+
+	fmt.Println("Sending 'Interested' message...")
+	interestedMsg := &message.Message{ID: message.MsgInterested}
+	_, err = conn.Write(interestedMsg.Serialize())
+	if err != nil {
+		log.Fatalf("Failed to send interested message: %v", err)
+	}
+
+	unchoked := false
+
+	fmt.Println("Listening for peer messages...")
+MessageLoop:
+	for {
+		msg, err := message.Read(conn)
+		if err != nil {
+			log.Fatalf("Error reading message: %v", err)
+		}
+
+		if msg == nil {
+			continue
+		}
+
+		switch msg.ID {
+		case message.MsgChoke:
+			fmt.Println("\nPeer choked us.")
+			unchoked = false
+		case message.MsgUnchoke:
+			fmt.Println("\nSUCCESS! Peer unchoked us!")
+			unchoked = true
+			break MessageLoop
+		case message.MsgBitfield:
+			fmt.Printf("\nReceived Bitfield! (Payload size: %d bytes)\n", len(msg.Payload))
+		case message.MsgHave:
+			fmt.Print(".")
+		default:
+			fmt.Printf("\nReceived message: %s\n", msg.Name())
+		}
+	}
+
+	if unchoked {
+		fmt.Println("\n--- next nom nom pieces time ---")
+	}
 }
