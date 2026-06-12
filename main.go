@@ -32,8 +32,13 @@ func main() {
 		log.Fatalf("Error generating peer ID: %v", err)
 	}
 
-	err = tf.RequestPeers(peerID, 6881)
+	peers, err := tf.RequestPeers(peerID, 6881)
 	if err != nil {
 		log.Fatalf("Error requesting peers: %v", err)
+	}
+
+	fmt.Printf("Found %d peers!\n", len(peers))
+	for _, peer := range peers {
+		fmt.Printf(" - %s:%d\n", peer.IP, peer.Port)
 	}
 }

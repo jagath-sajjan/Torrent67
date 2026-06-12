@@ -10,14 +10,15 @@ import (
 )
 
 type bencodeTrackerResp struct {
-	Interval int    `bencode:"interval"`
-	Peers    string `bencode:"peers"` // binary str of IPs & ports
+	Interval      int    `bencode:"interval"`
+	Peers         string `bencode:"peers"` // binary str of IPs & ports
+	FailureReason string `bencode:"failure reason"`
 }
 
-func (t *TorrentFile) RequestPeers(peerID [20]byte, port uint16) error {
+func (t *TorrentFile) RequestPeers(peerID [20]byte, port uint16) ([]Peer, error) {
 	base, err := url.Parse(t.Announce)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	params := url.Values{
@@ -36,18 +37,23 @@ func (t *TorrentFile) RequestPeers(peerID [20]byte, port uint16) error {
 
 	resp, err := http.Get(trackerURL)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	trackerResp := bencodeTrackerResp{}
 	err = bencode.Unmarshal(resp.Body, &trackerResp)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	fmt.Printf("Success! Tracker interval: %d secs\n", trackerResp.Interval)
-	fmt.Printf("Raw peers string length: %d bytes\n", len(trackerResp.Peers))
+	if trackerResp.FailureReason != "" {
+		return nil, fmt.Errorf("tracker rejected request: %s", trackerResp.FailureReason)
+	}
 
-	return nil
+	peers, err := UnmarshalPeers([]byte(trackerResp.Peers))
+	if err != nil {
+		return nil, err
+	}
+	return peers, nil
 }
