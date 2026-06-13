@@ -1,29 +1,21 @@
 ```bash
-Torrent67 on  main [!] via 🐹 v1.25.3 took 7s
+Torrent67 on  main [!?] via 🐹 v1.25.3
 ❯ go run main.go debian.torrent
 --- Torrent Parsed Successfully ---
 Tracker URL: http://bttracker.debian.org:6969/announce
 File name:   debian-13.5.0-arm64-netinst.iso
 Info Hash:   3f04ac6b9d14cb7341faff5f8cbc30d565bac416
 Scraping tracker: http://bttracker.debian.org:6969/announce
-Found 40 peers!
+2026/06/13 18:09:57 Starting Torrent67 Worker Pool...
+(0.04%) Downloaded piece #2 from swarm
+(0.07%) Downloaded piece #1 from swarm
+(0.11%) Downloaded piece #8 from swarm
+(0.14%) Downloaded piece #0 from swarm
+(0.18%) Downloaded piece #14 from swarm
+....
+......
+(99.96%) Downloaded piece #2797 from swarm
+(100.00%) Downloaded piece #1728 from swarm
 
-=========================================
-Dialing TCP connection to 77.172.167.173:10121...
-Connected! Sending BitTorrent Handshake...
-Handshake successful! Peer ID: 2d7142353231302d7a637579364d7338436b415f
-Sending 'Interested' message...
-Listening for peer messages...
-
-Received Bitfield! (Payload size: 351 bytes)
-
-SUCCESS! Peer unchoked us!
-
---- TIME TO DOWNLOAD PIECES ---
-Requested the first 16384 bytes. Waiting for delivery...
-Ignoring Unchoke message while waiting for our data...
-
-NOM NOM NOM! Successfully downloaded 16384 bytes of Ubuntu!
-
- SUCCESS! Saved the raw data to 'ubuntu_block_0.dat'
+[SUCCESS]! fully verified & downloaded 'debian-13.5.0-arm64-netinst.iso' to disk!
  ```
