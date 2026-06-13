@@ -77,3 +77,25 @@ func (m *Message) Name() string {
 	}
 	return fmt.Sprintf("Unknown#%d", m.ID)
 }
+
+func FormatRequest(index, begin, length int) *Message {
+	payload := make([]byte, 12)
+	binary.BigEndian.PutUint32(payload[0:4], uint32(index))
+	binary.BigEndian.PutUint32(payload[4:8], uint32(begin))
+	binary.BigEndian.PutUint32(payload[8:12], uint32(length))
+	return &Message{ID: MsgRequest, Payload: payload}
+}
+
+func ParsePiece(index int, buf []byte) ([]byte, error) {
+	if len(buf) < 8 {
+		return nil, fmt.Errorf("payload too short: %d bytes", len(buf))
+	}
+
+	parsedIndex := int(binary.BigEndian.Uint32(buf[0:4]))
+	if parsedIndex != index {
+		return nil, fmt.Errorf("expected piece index %d, got %d", index, parsedIndex)
+	}
+
+	block := buf[8:]
+	return block, nil
+}

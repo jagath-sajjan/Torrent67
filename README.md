@@ -1,20 +1,29 @@
 ```bash
-Torrent67 on  main [!?] via 🐹 v1.25.3
-❯ go run main.go test.torrent
+Torrent67 on  main [!] via 🐹 v1.25.3 took 7s
+❯ go run main.go debian.torrent
 --- Torrent Parsed Successfully ---
-Tracker URL: https://torrent.ubuntu.com/announce
-File name:   ubuntu-26.04-desktop-amd64.iso
-Info Hash:   dafc8c076ca2f3ed376eeae7c76a0d6be2415c45
-Connecting to tracker: https://torrent.ubuntu.com/announce
-Found 1 peers!
+Tracker URL: http://bttracker.debian.org:6969/announce
+File name:   debian-13.5.0-arm64-netinst.iso
+Info Hash:   3f04ac6b9d14cb7341faff5f8cbc30d565bac416
+Scraping tracker: http://bttracker.debian.org:6969/announce
+Found 40 peers!
 
-Dialing TCP connection to 185.125.190.59:6913...
+=========================================
+Dialing TCP connection to 77.172.167.173:10121...
 Connected! Sending BitTorrent Handshake...
-Handshake successful! Peer ID: 543033492d2d303132617042335962734e777674
+Handshake successful! Peer ID: 2d7142353231302d7a637579364d7338436b415f
 Sending 'Interested' message...
 Listening for peer messages...
 
+Received Bitfield! (Payload size: 351 bytes)
+
 SUCCESS! Peer unchoked us!
 
---- next nom nom pieces time ---
+--- TIME TO DOWNLOAD PIECES ---
+Requested the first 16384 bytes. Waiting for delivery...
+Ignoring Unchoke message while waiting for our data...
+
+NOM NOM NOM! Successfully downloaded 16384 bytes of Ubuntu!
+
+ SUCCESS! Saved the raw data to 'ubuntu_block_0.dat'
  ```
