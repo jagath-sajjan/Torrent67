@@ -2,3 +2,4 @@
 *.torrent
 *.dat
 *.iso
+build/
