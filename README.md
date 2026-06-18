@@ -7,9 +7,9 @@ Tor67 bypasses the bloat of modern UI-heavy clients, providing a raw, high perfo
 ## Features
 * **Built from Scratch:** Custom implementation of the BitTorrent Peer Wire Protocol.
 * **Highly Concurrent:** Utilizes Go's Goroutines to spin up a massive worker pool, downloading pieces from dozens of peers simultaneously.
-* **Multi-Tracker Support:** Parses `announce-list` to scrape fallback HTTP/HTTPS trackers.
+* **Multi Tracker Support:** Parses `announce-list` to scrape fallback HTTP/HTTPS trackers.
 * **Cryptographic Verification:** Verifies incoming blocks against SHA-1 piece hashes to ensure absolute data integrity.
-* **Cross-Platform:** Statically compiled standalone binaries for macOS (Apple Silicon/Intel), Windows, and Linux.
+* **Cross Platform:** Statically compiled standalone binaries for macOS (Apple Silicon/Intel), Windows, and Linux.
 
 ## Installation
 
@@ -45,4 +45,4 @@ Tor67 acts as a standard UNIX style CLI utility.
 ```
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License > see the [LICENSE](LICENSE) file for details.
