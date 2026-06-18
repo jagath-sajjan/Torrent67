@@ -1,21 +1,48 @@
-```bash
-Torrent67 on  main [!?] via 🐹 v1.25.3
-❯ go run main.go debian.torrent
---- Torrent Parsed Successfully ---
-Tracker URL: http://bttracker.debian.org:6969/announce
-File name:   debian-13.5.0-arm64-netinst.iso
-Info Hash:   3f04ac6b9d14cb7341faff5f8cbc30d565bac416
-Scraping tracker: http://bttracker.debian.org:6969/announce
-2026/06/13 18:09:57 Starting Torrent67 Worker Pool...
-(0.04%) Downloaded piece #2 from swarm
-(0.07%) Downloaded piece #1 from swarm
-(0.11%) Downloaded piece #8 from swarm
-(0.14%) Downloaded piece #0 from swarm
-(0.18%) Downloaded piece #14 from swarm
-....
-......
-(99.96%) Downloaded piece #2797 from swarm
-(100.00%) Downloaded piece #1728 from swarm
+# Tor67 <3
 
-[SUCCESS]! fully verified & downloaded 'debian-13.5.0-arm64-netinst.iso' to disk!
- ```
+A lightweight, custom BitTorrent client built from scratch in Go. 
+
+Tor67 bypasses the bloat of modern UI-heavy clients, providing a raw, high performance CLI engine for parsing `.torrent` files, communicating with trackers, and downloading files via a concurrent P2P swarm.
+
+## Features
+* **Built from Scratch:** Custom implementation of the BitTorrent Peer Wire Protocol.
+* **Highly Concurrent:** Utilizes Go's Goroutines to spin up a massive worker pool, downloading pieces from dozens of peers simultaneously.
+* **Multi-Tracker Support:** Parses `announce-list` to scrape fallback HTTP/HTTPS trackers.
+* **Cryptographic Verification:** Verifies incoming blocks against SHA-1 piece hashes to ensure absolute data integrity.
+* **Cross-Platform:** Statically compiled standalone binaries for macOS (Apple Silicon/Intel), Windows, and Linux.
+
+## Installation
+
+You can download the pre compiled binaries from the `build/` directory, or compile it yourself if you have Go installed:
+
+```bash
+git clone https://github.com/jagath-sajjan/Torrent67.git
+cd Torrent67
+go build -o tor67 main.go
+```
+
+## Usage
+Tor67 acts as a standard UNIX style CLI utility.
+
+**View Torrent Metadata:**
+```bash
+./tor67 -i ubuntu.torrent
+```
+
+**Scrape Trackers & List Active Peers:**
+```bash
+./tor67 -cp ubuntu.torrent
+```
+
+**Download the File (defaults to current directory):**
+```bash
+./tor67 -d ubuntu.torrent
+```
+
+**Download the File to a Specific Location:**
+```bash
+./tor67 -d ubuntu.torrent -loc /Users/Shared/Downloads
+```
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
