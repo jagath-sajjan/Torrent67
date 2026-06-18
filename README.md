@@ -21,27 +21,45 @@ cd Torrent67
 go build -o tor67 main.go
 ```
 
+### Global Installation (Run from anywhere)
+To use `tor67` from any directory without needing the `./` prefix, add it to your system path.
+
+**macOS & Linux:**
+Move the compiled binary into your local binaries folder.
+```bash
+sudo mv tor67 /usr/local/bin/
+```
+
+**Windows:**
+1. Create a permanent folder for the app (e.g., `C:\Program Files\Tor67`).
+2. Move your compiled `tor67-win64.exe` into that folder and rename it to `tor67.exe`.
+3. Open the Windows Start Menu, search for **"Environment Variables"**, and hit enter.
+4. Click the **Environment Variables...** button.
+5. Under "System variables", select the `Path` variable and click **Edit**.
+6. Click **New**, paste the path to your folder (`C:\Program Files\Tor67`), and hit OK. 
+7. Restart your terminal.
+
 ## Usage
-Tor67 acts as a standard UNIX style CLI utility.
+Once installed globally, Tor67 acts as a standard UNIX style CLI utility.
 
 **View Torrent Metadata:**
 ```bash
-./tor67 -i ubuntu.torrent
+tor67 -i ubuntu.torrent
 ```
 
 **Scrape Trackers & List Active Peers:**
 ```bash
-./tor67 -cp ubuntu.torrent
+tor67 -cp ubuntu.torrent
 ```
 
 **Download the File (defaults to current directory):**
 ```bash
-./tor67 -d ubuntu.torrent
+tor67 -d ubuntu.torrent
 ```
 
 **Download the File to a Specific Location:**
 ```bash
-./tor67 -d ubuntu.torrent -loc /Users/Shared/Downloads
+tor67 -d ubuntu.torrent -loc /Users/Shared/Downloads
 ```
 
 ## License
