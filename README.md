@@ -1,5 +1,7 @@
 # Tor67 <3
 
+![Tor67 Demo](demo.gif)
+
 A lightweight, custom BitTorrent client built from scratch in Go. 
 
 Tor67 bypasses the bloat of modern UI-heavy clients, providing a raw, high performance CLI engine for parsing `.torrent` files, communicating with trackers, and downloading files via a concurrent P2P swarm.

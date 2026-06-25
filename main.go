@@ -37,6 +37,19 @@ func main() {
 		os.Exit(1)
 	}
 
+	var targetFile string
+	if *infoCmd != "" {
+		targetFile = *infoCmd
+	} else if *peersCmd != "" {
+		targetFile = *peersCmd
+	} else if *downloadCmd != "" {
+		targetFile = *downloadCmd
+	}
+
+	if filepath.Ext(targetFile) != ".torrent" {
+		log.Fatalf("Error: Expected a .torrent file, but man you gave '%s'. Make sure you aren't passing the dowloaded file by mistake!", filepath.Ext(targetFile))
+	}
+
 	if *infoCmd != "" {
 		printInfo(*infoCmd)
 		return
