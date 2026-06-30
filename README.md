@@ -2,20 +2,19 @@
 
 ![Tor67 Demo](demo.gif)
 
-A lightweight, custom BitTorrent client built from scratch in Go. 
+a lightweight custom BitTorrent client built from scratch in Go. 
 
-Tor67 bypasses the bloat of modern UI-heavy clients, providing a raw, high performance CLI engine for parsing `.torrent` files, communicating with trackers, and downloading files via a concurrent P2P swarm.
+Tor67 bypasses the bloat of modern UI heavy clients high performance CLI engine for parsing `.torrent` files communicating with trackers and downloading files via a concurrent P2P swarm.
 
 ## Features
-* **Built from Scratch:** Custom implementation of the BitTorrent Peer Wire Protocol.
-* **Highly Concurrent:** Utilizes Go's Goroutines to spin up a massive worker pool, downloading pieces from dozens of peers simultaneously.
-* **Multi Tracker Support:** Parses `announce-list` to scrape fallback HTTP/HTTPS trackers.
-* **Cryptographic Verification:** Verifies incoming blocks against SHA-1 piece hashes to ensure absolute data integrity.
-* **Cross Platform:** Statically compiled standalone binaries for macOS (Apple Silicon/Intel), Windows, and Linux.
+Custom implementation of the BitTorrent Peer Wire Protocol.
+Utilizes Go's Goroutines to spin up a massive worker pool, downloading pieces from dozens of peers simultaneously.
+Parses `announce-list` to scrape fallback HTTP/HTTPS trackers.
+Verifies incoming blocks against SHA-1 piece hashes to ensure absolute data integrity.
 
 ## Installation
 
-You can download the pre compiled binaries from the `build/` directory, or compile it yourself if you have Go installed:
+You can download the pre compiled binaries from the releases, or compile it yourself if you have Go installed:
 
 ```bash
 git clone https://github.com/jagath-sajjan/Torrent67.git
@@ -23,7 +22,7 @@ cd Torrent67
 go build -o tor67 main.go
 ```
 
-### Global Installation (Run from anywhere)
+### Global Installation
 To use `tor67` from any directory without needing the `./` prefix, add it to your system path.
 
 **macOS & Linux:**
@@ -33,10 +32,10 @@ sudo mv tor67 /usr/local/bin/
 ```
 
 **Windows:**
-1. Create a permanent folder for the app (e.g., `C:\Program Files\Tor67`).
+1. Create a permanent folder for the app like `C:\Program Files\Tor67`.
 2. Move your compiled `tor67-win64.exe` into that folder and rename it to `tor67.exe`.
 3. Open the Windows Start Menu, search for **"Environment Variables"**, and hit enter.
-4. Click the **Environment Variables...** button.
+4. Click the **Environment Variables** button.
 5. Under "System variables", select the `Path` variable and click **Edit**.
 6. Click **New**, paste the path to your folder (`C:\Program Files\Tor67`), and hit OK. 
 7. Restart your terminal.
